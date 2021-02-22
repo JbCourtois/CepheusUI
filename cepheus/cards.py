@@ -49,6 +49,12 @@ class Card(namedtuple('Card', ['rank', 'suit'])):
         text = ''.join(map(str, [self.rank, self.suit]))
         return colored(text, self.suit.color, attrs=['bold'])
 
+    def __lt__(self, other):
+        return (self.rank, self.suit) < (other.rank, other.suit)
+
+    def __gt__(self, other):
+        return (self.rank, self.suit) > (other.rank, other.suit)
+
     def to_cepheus(self):
         return ''.join(map(str, [self.rank, self.suit.letter]))
 
