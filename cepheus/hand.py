@@ -13,19 +13,27 @@ class LoggerMixin:
         print(*args, **kwargs, file=self.logger)
 
 
+class Round:
+    PREFLOP = 0
+    FLOP = 1
+    TURN = 2
+    RIVER = 3
+    SHOWDOWN = 4
+
+
 class Hand(LoggerMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.pot = 1
-        self.round_id = 0
+        self.round_id = Round.PREFLOP
         self.deck = generate_deck()
         self.table_cards = CardSet()
 
         self.history = StringIO()
         self.active_player = 0
         self.nb_raises = 1
-        self.bb_can_check = True
+        self.has_acted_array = [False, False]
 
         self.sb_cards = self.deck.bulkpop(2)
         self.bb_cards = self.deck.bulkpop(2)
@@ -34,30 +42,38 @@ class Hand(LoggerMixin):
         self.active_player = 1 - self.active_player
 
     def next_round(self):
+        self.log()
+        self.round_id += 1
+        if self.round_id >= Round.SHOWDOWN:
+            # Showdown
+            return
+
         self.history.write('/')
 
-        for _ in range(1 if self.round_id > 0 else 3):
+        for _ in range(3 if self.round_id == Round.FLOP else 1):
             self.table_cards.append(self.deck.pop())
 
         self.log('Pot:', self.pot)
         self.log('Table:', self.table_cards)
 
-        self.round_id += 1
-        self.active_player = 0
+        self.active_player = 1
         self.nb_raises = 0
-        self.bb_can_check = True
+        self.has_acted_array = [False, False]
 
     def apply_call(self):
         self.history.write('c')
-        if self.active_player == 1 or not self.bb_can_check:
+        self.has_acted_array[self.active_player] = True
+
+        if all(self.has_acted_array):
             self.next_round()
         else:
             self.switch_active_player()
 
     def apply_raise(self):
         self.history.write('r')
-        self.pot += (2 if self.nb_raises else 1)
-        self.bb_can_check = False
+        self.has_acted_array[self.active_player] = True
+
+        self.pot += (2 if self.round_id >= Round.TURN else 1)
         self.nb_raises += 1
         self.switch_active_player()
 
