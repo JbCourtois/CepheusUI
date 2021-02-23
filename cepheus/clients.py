@@ -24,7 +24,7 @@ class HumanClient(Client):
         print('Your cards:', cards)
 
     def get_action(self, hand_state):
-        return input('Your action? (F)old / (C)all / (R)aise')
+        return input('Your action? (F)old / (C)all / (R)aise ').upper()
 
 
 class CepheusClient(Client):
