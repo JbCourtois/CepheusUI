@@ -15,5 +15,5 @@ class TestDeck(TestCase):
         deck.sort()
 
         deuces = deck.bulkpop(4)
-        self.assertEqual(str(deuces), '2♣ 2♦ 2♥ 2♠')
-        self.assertEqual(deuces.to_cepheus(), '2c2d2h2s')
+        self.assertEqual(str(deuces), '2♠ 2♥ 2♦ 2♣')
+        self.assertEqual(deuces.to_cepheus(), '2s2h2d2c')

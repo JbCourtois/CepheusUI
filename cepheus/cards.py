@@ -37,10 +37,10 @@ class Suit(IndexableMixin, namedtuple('Suit', ['letter', 'symbol', 'color'])):
 
 
 SUITS = [
-    Suit('s', '♠', 'white'),
-    Suit('h', '♥', 'red'),
-    Suit('d', '♦', 'yellow'),
     Suit('c', '♣', 'green'),
+    Suit('d', '♦', 'yellow'),
+    Suit('h', '♥', 'red'),
+    Suit('s', '♠', 'white'),
 ]
 
 
