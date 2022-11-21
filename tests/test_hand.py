@@ -26,4 +26,4 @@ class TestHand(TestCase):
         self.hand.apply_raise()
         self.hand.apply_raise()
 
-        self.assertEqual(self.hand.get_state(), 'rrc/cc/rr:ThJcJdQs')
+        self.assertEqual(self.hand.get_state(), 'rrc/cc/rr:TdJsJhQc')
